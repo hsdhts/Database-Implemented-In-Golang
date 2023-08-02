@@ -6,6 +6,7 @@ import (
 	"testing"
 )
 
+// create
 func TestExecSqlCreate(t *testing.T) {
 	db := GetConnection()
 	defer db.Close()
@@ -22,6 +23,7 @@ func TestExecSqlCreate(t *testing.T) {
 	fmt.Println("Success insert customer")
 }
 
+// read
 func TestExecSqlRead(t *testing.T) {
 	db := GetConnection()
 	defer db.Close()
@@ -39,4 +41,47 @@ func TestExecSqlRead(t *testing.T) {
 
 	fmt.Println("Id: ", id)
 	fmt.Println("Name: ", name)
+}
+
+// update
+func TestExecSqlUpdate(t *testing.T) {
+	db := GetConnection()
+	defer db.Close()
+
+	ctx := context.Background()
+
+	query := "UPDATE  customer  SET name= 'KucingGarong' WHERE id= 'wonderwomen'"
+
+	result, err := db.ExecContext(ctx, query)
+	if err != nil {
+		panic(err)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("RowsAffected: ", rowsAffected)
+}
+
+// delete
+func TestExecSqlDelete(t *testing.T) {
+	db := GetConnection()
+	defer db.Close()
+
+	ctx := context.Background()
+
+	query := "DELETE  FROM customer WHERE id= 'batman'"
+
+	result, err := db.ExecContext(ctx, query)
+	if err != nil {
+		panic(err)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("Success delete batman", rowsAffected)
+	//fmt.Println("RowsAffected: ", rowsAffected)
 }
