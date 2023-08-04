@@ -13,7 +13,7 @@ func TestExecSqlCreate(t *testing.T) {
 
 	ctx := context.Background()
 
-	script := "INSERT INTO  customer(id, name) VALUES ('wonderwomen', 'Wonderwomen')"
+	script := "INSERT INTO  customer(id, name) VALUES ('captainAmerica', 'CaptainAmerica')"
 	_, err := db.ExecContext(ctx, script)
 
 	if err != nil {
@@ -30,7 +30,7 @@ func TestExecSqlRead(t *testing.T) {
 
 	ctx := context.Background()
 
-	query := "SELECT id, name  FROM customer WHERE id= 'batman'"
+	query := "SELECT id, name  FROM customer WHERE id= 'superman'"
 
 	var id, name string
 	err := db.QueryRowContext(ctx, query).Scan(&id, &name)
@@ -84,4 +84,30 @@ func TestExecSqlDelete(t *testing.T) {
 	}
 	fmt.Println("Success delete batman", rowsAffected)
 	//fmt.Println("RowsAffected: ", rowsAffected)
+}
+
+func TestQuerySwl(t *testing.T) {
+	db := GetConnection()
+	defer db.Close()
+
+	ctx := context.Background()
+
+	script := "SELECT id, name FROM customer"
+	rows, err := db.QueryContext(ctx, script)
+
+	if err != nil {
+		panic(err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var id, name string
+		err = rows.Scan(&id, &name)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println("Id: ", id)
+		fmt.Println("Name: ", name)
+	}
+
 }
