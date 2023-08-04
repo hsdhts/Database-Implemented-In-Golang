@@ -11,7 +11,7 @@ func TestEmpty(t *testing.T) {
 }
 
 func TestOpenConnection(t *testing.T) {
-	db, err := sql.Open("mysql", "root:password@tcp(localhost:3306)/golang_db")
+	db, err := sql.Open("mysql", "root:password@tcp(localhost:3306)/golang_db?parseTime=true")
 
 	if err != nil {
 		panic(err)

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"testing"
+	"time"
 )
 
 // create
@@ -110,4 +111,40 @@ func TestQuerySwl(t *testing.T) {
 		fmt.Println("Name: ", name)
 	}
 
+}
+
+func TestQuerySqlComplex(t *testing.T) {
+	db := GetConnection()
+	defer db.Close()
+
+	ctx := context.Background()
+
+	script := "SELECT id, name, email, balance, rating, birth_date, married, created_at FROM customer"
+	rows, err := db.QueryContext(ctx, script)
+
+	if err != nil {
+		panic(err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var id, name, email string
+		var balance int32
+		var rating float64
+		var birth_date, created_at time.Time
+		var married bool
+		err = rows.Scan(&id, &name, &email, &balance, &rating, &birth_date, &married, &created_at)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println("===============")
+		fmt.Println("Id: ", id)
+		fmt.Println("Name: ", name)
+		fmt.Println("Email: ", email)
+		fmt.Println("balance: ", balance)
+		fmt.Println("rating:", rating)
+		fmt.Println("birthDate: ", birth_date)
+		fmt.Println("married: ", married)
+		fmt.Println("created_at: ", created_at)
+	}
 }
