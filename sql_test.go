@@ -88,6 +88,7 @@ func TestExecSqlDelete(t *testing.T) {
 	//fmt.Println("RowsAffected: ", rowsAffected)
 }
 
+// query
 func TestQuerySwl(t *testing.T) {
 	db := GetConnection()
 	defer db.Close()
@@ -156,6 +157,7 @@ func TestQuerySqlComplex(t *testing.T) {
 	}
 }
 
+// sql injection
 func TestSqlInjection(t *testing.T) {
 	db := GetConnection()
 	defer db.Close()
@@ -185,6 +187,7 @@ func TestSqlInjection(t *testing.T) {
 	}
 }
 
+// sql parameter
 func TestExecSqlParameter(t *testing.T) {
 	db := GetConnection()
 	defer db.Close()
@@ -202,4 +205,27 @@ func TestExecSqlParameter(t *testing.T) {
 	}
 
 	fmt.Println("Success insert new user")
+}
+
+// auto increment
+func TestAutoincrement(t *testing.T) {
+	db := GetConnection()
+	defer db.Close()
+
+	ctx := context.Background()
+
+	email := "batman@gmail.com"
+	comment := "test email batman"
+
+	script := "INSERT INTO  comments(email, comment) VALUES (?, ?)"
+	result, err := db.ExecContext(ctx, script, email, comment)
+
+	if err != nil {
+		panic(err)
+	}
+	insertId, err := result.LastInsertId()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("Success insert new comment with id", insertId)
 }
