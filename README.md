@@ -1,2 +1,2 @@
 ## Golang Database
-The implementation how to connect database MySQL to Golang!
+the implementation how to connect database MySQL to Golang!
